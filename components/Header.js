@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import useHeaderStore from "@/store/header"
 import { useRouter } from "next/navigation"
-
+import { Button } from "@/components/ui/button"
 
 const Header = () => {
   const setSelectedRegister = useHeaderStore((state) => state.setSelectedRegister)
@@ -19,7 +19,7 @@ const Header = () => {
     <div className="w-full flex justify-between max-w-screen-md mx-auto p-5 border-b items-center">
       <span className="font-bold text-2xl">EXAM.UNN</span>
       <div className="flex gap-3 space-x-3">
-      <DropdownMenu>
+      {/* <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">Sign in</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
@@ -52,7 +52,9 @@ const Header = () => {
               }}>Student</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+       {/* <button onClick={() => router.push('/examiner/exam/create')}>Create Exam</button> */}
+       <button>Exam Results</button>
       </div>
     </div>
   )
