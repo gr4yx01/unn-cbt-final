@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
     Card,
     CardContent,
@@ -10,16 +10,19 @@ import {
   import {
     Carousel,
     CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
+    CarouselItem
   } from "@/components/ui/carousel"
 import Autoplay from 'embla-carousel-autoplay'
+import { useCookies } from 'react-cookie'
+import axios from 'axios'
+import useSWR from 'swr'
 
 const page = () => {
     const plugin = useRef(
         Autoplay({ delay: 2000, stopOnInteraction: true })
       )
+    const { data } = useSWR('exams/examiner')
+
   return (
     <div className='p-3 gap-5'>
         <span>Welcome back 🖐️</span>
@@ -30,7 +33,7 @@ const page = () => {
             </CardHeader>
             <CardContent className='w-full flex justify-center items-center'>
               <span className='font-semibold text-xl'>
-              10</span>
+              {data?.length}</span>
             </CardContent>
         </Card>
         </div>

@@ -9,17 +9,22 @@ import {
 import useHeaderStore from "@/store/header"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { useCookies } from "react-cookie"
 
 const Header = () => {
   const setSelectedRegister = useHeaderStore((state) => state.setSelectedRegister)
   const setSelectedLogin = useHeaderStore((state) => state.setSelectedLogin)
   const router = useRouter()
+  const [cookie, ] = useCookies(["access_token", "role"])
 
   return (
     <div className="w-full flex justify-between max-w-screen-md mx-auto p-5 border-b items-center">
       <span className="font-bold text-2xl">EXAM.UNN</span>
       <div className="flex gap-3 space-x-3">
-      {/* <DropdownMenu>
+        {
+          !cookie.access_token && (
+            <>
+      <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">Sign in</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
@@ -52,9 +57,24 @@ const Header = () => {
               }}>Student</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu> */}
-       {/* <button onClick={() => router.push('/examiner/exam/create')}>Create Exam</button> */}
-       <button>Exam Results</button>
+        </DropdownMenu>
+            </>
+          )
+        }
+        {
+          cookie.role === 'EXAMINER' ? <button onClick={() => router.push('/examiner')}>Dashboard</button> : cookie.role === 'STUDENT' ? <button onClick={() => router.push('/student')}>Dashboard</button> : ""
+        }
+        {
+          cookie.role === 'EXAMINER' && (
+            <button onClick={() => router.push('/examiner/exam/create')}>Create Exam</button>
+
+          )
+        }
+        {
+          cookie.role === 'STUDENT' && (
+            <button onClick={() => router.push('/student/result')}>Exam Results</button>
+          )
+        }
       </div>
     </div>
   )
