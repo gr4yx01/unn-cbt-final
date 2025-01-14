@@ -28,7 +28,7 @@ const Header = () => {
       <span className="font-bold text-2xl">EXAM.UNN</span>
       <div className="flex gap-3 space-x-3">
         {
-          !cookie.access_token && (
+          cookie.access_token === undefined && (
             <>
       <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">Sign in</DropdownMenuTrigger>
@@ -82,7 +82,7 @@ const Header = () => {
           )
         }
         {
-          cookie.access_token && <button onClick={logOut}>Log out</button> 
+          cookie.access_token !== undefined && <button onClick={logOut}>Log out</button> 
         }
       </div>
     </div>

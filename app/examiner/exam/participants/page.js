@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
     Table,
@@ -8,12 +10,19 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import useExamStore from '@/store/exam'
+import useSWR from 'swr'
   
 
 const page = () => {
+  const selectedExamId = useExamStore((state) => state.selectedExamId)
+  const { data } = useSWR(`exams/${selectedExamId}/participants`)
+
+  console.log(data)
+
   return (
     <div className='p-8'>
-        <span className='font-semibold text-xl'>Elementary Mathematics</span>
+        <span className='font-semibold text-xl'>Total Number of Participant</span>
         
       <Table className='mt-8'>
   <TableCaption>List of students who participated in your exam.</TableCaption>

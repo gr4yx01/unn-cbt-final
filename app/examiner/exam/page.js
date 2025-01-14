@@ -17,8 +17,6 @@ export default function Page() {
       }
     };
 
-    console.log(isCopied)
-
   return (
     <div className='p-4 space-y-6'>
       <span className='font-bold text-2xl'>Elementary Mathematics I</span>

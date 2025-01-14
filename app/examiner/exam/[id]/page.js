@@ -1,5 +1,6 @@
 'use client'
-import { useParams, useSearchParams } from 'next/navigation';
+import useExamStore from '@/store/exam';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { BsCopy } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
@@ -9,10 +10,10 @@ export default function Page() {
     const [isCopied, setIsCopied] = useState(false);
     const { id } = useParams()
     const optionLetters = ['A', 'B', 'C', 'D']
+    const router = useRouter()
+    const setSelectedExamId = useExamStore((state) => state.setSelectedExamId)
 
     const { data } = useSWR(`/exams/${id}`)
-
-    console.log(data)
 
     const handleCopy = async () => {
       const textToCopy = '135064';
@@ -41,7 +42,10 @@ export default function Page() {
         </div>
       </div>
       <div className='flex gap-4 items-center'>
-        <button onClick={() => {}} className='border p-2 px-3 rounded-full text-sm'>{data?.ExamTaken?.length} participant</button>
+        <button onClick={() => {
+            setSelectedExamId(data?.id)
+            router.push(`/examiner/exam/participants`)
+            }} className='border p-2 px-3 rounded-full text-sm'>{data?.ExamTaken?.length} participant</button>
         <span className='border p-2 px-3 rounded-full text-sm'>85% avg performance</span>
         <span className='border p-2 px-3 rounded-full text-sm'>{data?.duration} minutes</span>
         <span className='border p-2 px-3 rounded-full text-sm'>{data?.noOfQuestions} Questions</span>

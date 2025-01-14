@@ -1,11 +1,13 @@
 'use client'
 import CustomButton from '@/components/CustomButton';
+import useExamStore from '@/store/exam';
 import React, { useState } from 'react';
 import { BsCopy } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
 
 export default function Page() {
     const [isCopied, setIsCopied] = useState(false);
+    const examToParticipateIn = useExamStore((state) => state.examToParticipateIn)
 
     const handleCopy = async () => {
       const textToCopy = '135064';
@@ -18,21 +20,20 @@ export default function Page() {
       }
     };
 
-    console.log(isCopied)
 
   return (
     <div className='p-4 space-y-6'>
-      <span className='font-bold text-2xl'>Elementary Mathematics I</span>
+      <span className='font-bold text-2xl'>{examToParticipateIn?.description}</span>
       <div className='flex justify-between items-center'>
         <div className='flex gap-4 mt-4 items-center'>
             <span>Course code: </span>
-            <span className='border p-2 px-3 rounded-full text-sm font-semibold'>MTH121</span>
+            <span className='border p-2 px-3 rounded-full text-sm font-semibold'>{examToParticipateIn?.title}</span>
         </div>
       </div>
       <div className='flex gap-4 items-center'>
-        <span className='border p-2 px-3 rounded-full text-sm'>15 minutes</span>
-        <span className='border p-2 px-3 rounded-full text-sm'>30 Questions</span>
-        <span className='border p-2 px-3 rounded-full text-sm'>Multiple choice</span>
+        <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.duration} minutes</span>
+        <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.noOfQuestions} Questions</span>
+        <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.examType === 'MULTIPLE_CHOICE' ? 'multiple' : 'true or false'} choice</span>
       </div>
       <CustomButton label={'Start Exam'} btnStyle={'bg-primary rounded-md px-5 py-2'} textStyle={'font-medium text-white'} />
     </div>

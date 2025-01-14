@@ -31,6 +31,7 @@ export const axiosInstance = axios.create({
   },
 });
 
+// console.log(parseCook)
 
 export default function RootLayout({ children }) {
   const axiosInstance = axios.create({
