@@ -1,5 +1,6 @@
 import Button from "@/components/CustomButton";
 import Image from "next/image";
+import { parseCookies } from "nookies";
 
 export default function Home() {
   return (

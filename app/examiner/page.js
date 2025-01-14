@@ -13,15 +13,26 @@ import {
     CarouselItem
   } from "@/components/ui/carousel"
 import Autoplay from 'embla-carousel-autoplay'
-import { useCookies } from 'react-cookie'
-import axios from 'axios'
 import useSWR from 'swr'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import useExamStore from '@/store/exam'
 
 const page = () => {
     const plugin = useRef(
         Autoplay({ delay: 2000, stopOnInteraction: true })
       )
-    const { data } = useSWR('exams/examiner')
+    const { data  } = useSWR('exams/examiner')
+    // const setSelectedExamDetail = useExamStore((state) => state.setSelectedExamDetail)
+    const router = useRouter()
+
+    // const routeToDetail = (exam) => {
+    //   console.log('hello')
+    //   setSelectedExamDetail(exam)
+    //   router.push('/examiner/exam')
+    // }
+
+    console.log(data)
 
   return (
     <div className='p-3 gap-5'>
@@ -53,78 +64,24 @@ const page = () => {
              onMouseLeave={plugin.current.reset}
         >
           <CarouselContent>
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 452</CardTitle>
-              <CardDescription>Advanced Digital Laboratory</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>45</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
-        <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 438</CardTitle>
-              <CardDescription>Artificial Intelligence</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>60</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
-        <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 444</CardTitle>
-              <CardDescription>Computer Network Security</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>12</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
-        <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 444</CardTitle>
-              <CardDescription>Computer Network Security</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>12</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
-        <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 444</CardTitle>
-              <CardDescription>Computer Network Security</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>12</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
-        <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card>
-            <CardHeader>
-              <CardTitle>COS 444</CardTitle>
-              <CardDescription>Computer Network Security</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
-              <span>Number of participant:</span>
-              <span className='font-semibold'>12</span>
-            </CardContent>
-        </Card>
-        </CarouselItem>
+            {
+              data && data?.map((exam) => (
+                <CarouselItem  className="md:basis-1/2 lg:basis-1/3">
+                  <Link href={`/examiner/exam/${exam?.id}`}>
+                    <Card >
+                    <CardHeader>
+                      <CardTitle>{exam?.title}</CardTitle>
+                      <CardDescription>{exam?.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className='w-full flex justify-start text-sm gap-3 items-center'>
+                      <span>Number of participant:</span>
+                      <span className='font-semibold'>{exam?.ExamTaken?.length}</span>
+                    </CardContent>
+                    </Card>
+                  </Link>
+                </CarouselItem>
+              ))
+            }
           </CarouselContent>
         </Carousel>
     </div>

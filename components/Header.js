@@ -15,7 +15,13 @@ const Header = () => {
   const setSelectedRegister = useHeaderStore((state) => state.setSelectedRegister)
   const setSelectedLogin = useHeaderStore((state) => state.setSelectedLogin)
   const router = useRouter()
-  const [cookie, ] = useCookies(["access_token", "role"])
+  const [cookie, removeCookie] = useCookies(["access_token", "role"])
+
+  const logOut = async () => {
+    removeCookie('access_token')
+    removeCookie('role')
+    router.push('/')
+  }
 
   return (
     <div className="w-full flex justify-between max-w-screen-md mx-auto p-5 border-b items-center">
@@ -74,6 +80,9 @@ const Header = () => {
           cookie.role === 'STUDENT' && (
             <button onClick={() => router.push('/student/result')}>Exam Results</button>
           )
+        }
+        {
+          cookie.access_token && <button onClick={logOut}>Log out</button> 
         }
       </div>
     </div>

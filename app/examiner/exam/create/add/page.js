@@ -15,6 +15,7 @@ const page = () => {
   const examDetail = useExamStore((state) => state.examDetail)
   const questions = useExamStore((state) => state.questions)
   const addQuestions = useExamStore((state) => state.addQuestions)
+  const clearQuestions = useExamStore((state) => state.clearQuestions)
   const [detail, setDetail] = useState({
     question: '',
     answer: ''
@@ -27,9 +28,6 @@ const page = () => {
   const [optionC, setOptionC] = useState('')
   const [optionD, setOptionD] = useState('')
 
-  console.log(examDetail)
-
-
   const handleSubmit = () => {
     addQuestions({
       question: detail?.question,
@@ -40,7 +38,6 @@ const page = () => {
     })
 
     if(questions?.length + 1 !== Number(examDetail?.numberOfQuestions)) {
-  
       setDetail({
         question: '',
         answer: ''
@@ -51,19 +48,27 @@ const page = () => {
       setOptionC('')
       setOptionD('')
     } else {
-      setLoading(true)
+      const finalQuestions = [...questions, {
+        question: detail?.question,
+        answer: detail?.answer,
+        options: examDetail?.typeOfQuestion === 'MULTIPLE_CHOICE' ? [
+          optionA, optionB, optionC, optionD
+        ] : ['TRUE', 'FALSE'] 
+      }]
       try{
-        console.log(questions)
-        // questions.forEach(async (question) => {
-        //   await axiosInstance.post('', {
-        //     title: question.question,
-        //     options: question.options,
-        //     answer: question.answer
-        //   })
-        // })
-  
+        setLoading(true)
+        console.log(finalQuestions)
+        finalQuestions.forEach((question) => {
+          axiosInstance.post(`questions/${examDetail?.id}/multiple`, {
+            title: question.question,
+            options: question.options,
+            answer: question.answer
+          })
+        })
+        
+        clearQuestions()
         toast.success('Questions successfully uploaded')
-        // router.push('/examiner')
+        router.push('/examiner')
         setLoading(false)
       } catch (err) {
         toast.error('Error uploading')
@@ -115,16 +120,16 @@ const page = () => {
                   {
                     <>
                       {optionA && (
-                        <SelectItem value={optionA}>{optionA}</SelectItem>
+                        <SelectItem value={0}>{optionA}</SelectItem>
                       )}
                       {optionB && (
-                        <SelectItem value={optionB}>{optionB}</SelectItem>
+                        <SelectItem value={1}>{optionB}</SelectItem>
                       )}
                       {optionC && (
-                        <SelectItem value={optionC}>{optionC}</SelectItem>
+                        <SelectItem value={2}>{optionC}</SelectItem>
                       )}
                       {optionD && (
-                        <SelectItem value={optionD}>{optionD}</SelectItem>
+                        <SelectItem value={3}>{optionD}</SelectItem>
                       )}
                     </>
                   }

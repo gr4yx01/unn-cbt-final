@@ -10,6 +10,7 @@ import { SWRConfig } from 'swr';
 import { unstable_serialize } from 'swr' 
 import { unstable_serialize as infinite_unstable_serialize } from 'swr/infinite'
 import { parseCookies } from 'nookies'
+import { useEffect } from "react";
 
 
 // const geistSans = Geist({
@@ -31,11 +32,18 @@ export const axiosInstance = axios.create({
 });
 
 
-const fetcher = async (url) => {
-  return await axiosInstance.get(url).then((response) => response.data);
-};
-
 export default function RootLayout({ children }) {
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3001/',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${parseCookies().access_token}` || ''
+    },
+  });
+
+  const fetcher = async (url) => {
+    return await axiosInstance.get(url).then((response) => response.data);
+  };
 
   return (
     <html className={``}>
