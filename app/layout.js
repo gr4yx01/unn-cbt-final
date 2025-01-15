@@ -5,12 +5,13 @@ import Header from "@/components/Header";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { CookiesProvider } from "react-cookie";
+import { CookiesProvider, useCookies } from "react-cookie";
 import { SWRConfig } from 'swr';
 import { unstable_serialize } from 'swr' 
 import { unstable_serialize as infinite_unstable_serialize } from 'swr/infinite'
 import { parseCookies } from 'nookies'
 import { useEffect } from "react";
+import { isTokenExpired } from "@/helper/auth";
 
 
 // const geistSans = Geist({
@@ -27,24 +28,46 @@ export const axiosInstance = axios.create({
   baseURL: 'http://localhost:3001/',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${parseCookies().access_token}` || ''
+    // 'Authorization': `Bearer ${parseCookies().access_token}` || ''
   },
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = parseCookies().access_token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
+const fetcher = async (url) => {
+  return await axiosInstance.get(url).then((response) => response.data);
+};
 
 // console.log(parseCook)
 
 export default function RootLayout({ children }) {
-  const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3001/',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${parseCookies().access_token}` || ''
-    },
-  });
+  const [_, __, removeCookie] = useCookies(['access_token', 'role'])
+  // const axiosInstance = axios.create({
+  //   baseURL: 'http://localhost:3001/',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${parseCookies().access_token}` || ''
+  //   },
+  // });
 
-  const fetcher = async (url) => {
-    return await axiosInstance.get(url).then((response) => response.data);
-  };
+  useEffect(() => {
+    if(isTokenExpired(parseCookies().access_token)) {
+      removeCookie('access_token')
+      removeCookie('role')
+    }
+  }, [])
 
   return (
     <html className={``}>

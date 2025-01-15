@@ -1,6 +1,7 @@
 'use client'
 import CustomButton from '@/components/CustomButton';
 import useExamStore from '@/store/exam';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BsCopy } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
@@ -8,6 +9,7 @@ import { FaRegEdit } from "react-icons/fa";
 export default function Page() {
     const [isCopied, setIsCopied] = useState(false);
     const examToParticipateIn = useExamStore((state) => state.examToParticipateIn)
+    const router = useRouter()
 
     const handleCopy = async () => {
       const textToCopy = '135064';
@@ -35,7 +37,7 @@ export default function Page() {
         <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.noOfQuestions} Questions</span>
         <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.examType === 'MULTIPLE_CHOICE' ? 'multiple' : 'true or false'} choice</span>
       </div>
-      <CustomButton label={'Start Exam'} btnStyle={'bg-primary rounded-md px-5 py-2'} textStyle={'font-medium text-white'} />
+      <CustomButton handlePress={() => router.push(`/student/exam/start`)} label={'Start Exam'} btnStyle={'bg-primary rounded-md px-5 py-2'} textStyle={'font-medium text-white'} />
     </div>
   );
 }
