@@ -18,12 +18,14 @@ const Header = () => {
   const [cookie, removeCookie] = useCookies(["access_token", "role"])
 
   const logOut = async () => {
-    removeCookie('access_token')
-    removeCookie('role')
+    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+    document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
     router.push('/')
   }
 
   const isLoggedIn = Boolean(cookie.access_token)
+
+  console.log(isLoggedIn)
 
   return (
     <div className="w-full flex justify-between max-w-screen-md mx-auto p-5 border-b items-center">
@@ -70,7 +72,7 @@ const Header = () => {
           )
         }
         {
-          cookie.role === 'EXAMINER' ? <button onClick={() => router.push('/examiner')}>Dashboard</button> : cookie.role === 'STUDENT' ? <button onClick={() => router.push('/student')}>Dashboard</button> : ""
+          cookie.role === 'EXAMINER' ? <button onClick={() => router.push('/examiner')}>Dashboard</button> : cookie.role === 'STUDENT' ? <button onClick={() => router.push('/student')}>Take Exam</button> : ""
         }
         {
           cookie.role === 'EXAMINER' && (
