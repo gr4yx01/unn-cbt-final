@@ -55,16 +55,25 @@ const page = () => {
           optionA, optionB, optionC, optionD
         ] : ['TRUE', 'FALSE'] 
       }]
+
       try{
         setLoading(true)
-        console.log(finalQuestions)
-        finalQuestions.forEach((question) => {
-          axiosInstance.post(`questions/${examDetail?.id}/multiple`, {
-            title: question.question,
-            options: question.options,
-            answer: question.answer
+        if(examDetail?.typeOfQuestion === 'MULTIPLE_CHOICE') {
+          finalQuestions.forEach((question) => {
+            axiosInstance.post(`questions/${examDetail?.id}/multiple`, {
+              title: question.question,
+              options: question.options,
+              answer: question.answer
+            })
           })
-        })
+        } else {
+          finalQuestions.forEach((question) => {
+            axiosInstance.post(`questions/${examDetail?.id}/binary`, {
+              title: question.question,
+              answer: question.answer
+            })
+          })
+        }
         
         clearQuestions()
         toast.success('Questions successfully uploaded')

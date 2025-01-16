@@ -76,7 +76,7 @@ const page = () => {
           </SelectContent>
         </Select>
       </div>
-      <CustomButton label={ loading ? <Loader2  className='w-6 h-6 animate-spin' /> : 'Sign up' } handlePress={createExam} textStyle={'text-white font-semibold'} btnStyle={''}/>
+      <CustomButton label={ loading ? <Loader2  className='w-6 h-6 animate-spin' /> : 'Create' } handlePress={createExam} textStyle={'text-white font-semibold'} btnStyle={''}/>
       {/* <button onClick={createExam}>
         <span className='text-white font-semibold text-lg'>Create</span>
       </button> */}

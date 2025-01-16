@@ -1,18 +1,21 @@
 'use client'
+import { axiosInstance } from '@/app/layout';
 import CustomButton from '@/components/CustomButton';
 import useExamStore from '@/store/exam';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BsCopy } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
+import { toast } from 'react-toastify';
 
 export default function Page() {
     const [isCopied, setIsCopied] = useState(false);
     const examToParticipateIn = useExamStore((state) => state.examToParticipateIn)
+    const setParticipationId = useExamStore((state) => state.setParticipationId)
     const router = useRouter()
 
     const handleCopy = async () => {
-      const textToCopy = '135064';
+      const textToCopy = examToParticipateIn?.exam_code
       try {
         await navigator.clipboard.writeText(textToCopy);
         setIsCopied(true);
@@ -21,6 +24,19 @@ export default function Page() {
         console.error('Failed to copy text: ', err);
       }
     };
+
+    const handleParticipate = async () => {
+      try {
+          const res = await axiosInstance.post(`exams/${examToParticipateIn?.id}/participate`)
+          console.log(res)
+          setParticipationId(res.data?.data?.id)
+          router.push(`/student/exam/start`)
+      } catch(err) {
+        toast.error(err?.response?.data?.message, {
+          autoClose: 2000
+        })
+      }
+    }
 
 
   return (
@@ -37,7 +53,7 @@ export default function Page() {
         <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.noOfQuestions} Questions</span>
         <span className='border p-2 px-3 rounded-full text-sm'>{examToParticipateIn?.examType === 'MULTIPLE_CHOICE' ? 'multiple' : 'true or false'} choice</span>
       </div>
-      <CustomButton handlePress={() => router.push(`/student/exam/start`)} label={'Start Exam'} btnStyle={'bg-primary rounded-md px-5 py-2'} textStyle={'font-medium text-white'} />
+      <CustomButton handlePress={handleParticipate} label={'Start Exam'} btnStyle={'bg-primary rounded-md px-5 py-2'} textStyle={'font-medium text-white'} />
     </div>
   );
 }

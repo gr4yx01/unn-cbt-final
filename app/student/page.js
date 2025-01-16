@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { axiosInstance } from '../layout'
 import useExamStore from '@/store/exam'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 
 const page = () => {
@@ -17,12 +18,16 @@ const page = () => {
   const router = useRouter()
 
   const handleSubmit = async () => {
-    const res = await axiosInstance.post('/exams/student', {
-      exam_code: detail.code
-    })
-
-    setExamToParticipateIn(res.data)
-    router.push('/student/exam')
+    try {
+      const res = await axiosInstance.post('/exams/student', {
+        exam_code: detail.code
+      })
+  
+      setExamToParticipateIn(res.data)
+      router.push('/student/exam')
+    } catch (err) {
+      toast.error(err?.response?.data?.message)
+    }
   }
 
   return (

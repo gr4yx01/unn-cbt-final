@@ -23,12 +23,14 @@ const Header = () => {
     router.push('/')
   }
 
+  const isLoggedIn = Boolean(cookie.access_token)
+
   return (
     <div className="w-full flex justify-between max-w-screen-md mx-auto p-5 border-b items-center">
       <span className="font-bold text-2xl">EXAM.UNN</span>
       <div className="flex gap-3 space-x-3">
         {
-          cookie.access_token === undefined && (
+          !isLoggedIn && (
             <>
       <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">Sign in</DropdownMenuTrigger>
@@ -82,7 +84,7 @@ const Header = () => {
           )
         }
         {
-          cookie.access_token !== undefined && <button onClick={logOut}>Log out</button> 
+          isLoggedIn && <button onClick={logOut}>Log out</button> 
         }
       </div>
     </div>

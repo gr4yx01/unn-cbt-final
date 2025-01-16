@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
     Table,
@@ -8,9 +10,13 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-  
+import useSWR from 'swr'
 
 const page = () => {
+  const { data } = useSWR('/exams/student/written')
+
+  console.log(data)
+
   return (
     <div className='p-10 flex flex-col space-y-5'>
         <span className='font-semibold text-xl'>My Results.</span>
@@ -24,11 +30,17 @@ const page = () => {
     </TableRow>
   </TableHeader>
   <TableBody>
-    <TableRow>
-      <TableCell className="font-medium">COS 444</TableCell>
-      <TableCell>Computer Network Security</TableCell>
-      <TableCell>45</TableCell>
-    </TableRow>
+    {
+      data?.map((result) => (
+        <>
+          <TableRow>
+            <TableCell className="font-medium">{result.exam?.title}</TableCell>
+            <TableCell>{result?.exam?.description}</TableCell>
+            <TableCell>{result.score}</TableCell>
+          </TableRow>
+        </>
+      ))
+    }
   </TableBody>
 </Table>
 
