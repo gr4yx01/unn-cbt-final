@@ -64,8 +64,8 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     if(isTokenExpired(parseCookies().access_token)) {
-      removeCookie('access_token')
-      removeCookie('role')
+      document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+      document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
     }
   }, [])
 
